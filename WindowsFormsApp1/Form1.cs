@@ -84,29 +84,32 @@ namespace WindowsFormsApp1
             InitializeComponent();
             bit = 2;
             string save = @"save.log";
-
-            using (StreamReader file1 = new StreamReader(save))
+            try
             {
-                string line;
-                while ((line = file1.ReadLine()) != null)
+                using (StreamReader file1 = new StreamReader(save))
                 {
-                    line = line.Replace("Color", "");
-                    line = line.Replace("[", "");
-                    line = line.Replace("]", "");
-                    line = line.Replace(" ", "");
-                    load.Add(line);
-                }
-                if (load[0] == "2") { radioButton2bit.Checked = true; bit = 2; }
-                if (load[0] == "4") { radioButton4bit.Checked = true; bit = 4; }
-                if (load[0] == "6") { radioButton6bit.Checked = true; bit = 6; }
-                colorx.Color = Color.FromName(load[1]);
-                colory.Color = Color.FromName(load[2]);
-                if (load[3] == "1") { radioButton1.Checked = true; }
-                if (load[3] == "2") { radioButton2.Checked = true; }
-                if (load[3] == "3") { radioButton3.Checked = true; }
-                if (load[3] == "4") { radioButton4.Checked = true; }
+                    string line;
+                    while ((line = file1.ReadLine()) != null)
+                    {
+                        line = line.Replace("Color", "");
+                        line = line.Replace("[", "");
+                        line = line.Replace("]", "");
+                        line = line.Replace(" ", "");
+                        load.Add(line);
+                    }
+                    if (load[0] == "2") { radioButton2bit.Checked = true; bit = 2; }
+                    if (load[0] == "4") { radioButton4bit.Checked = true; bit = 4; }
+                    if (load[0] == "6") { radioButton6bit.Checked = true; bit = 6; }
+                    colorx.Color = Color.FromName(load[1]);
+                    colory.Color = Color.FromName(load[2]);
+                    if (load[3] == "1") { radioButton1.Checked = true; }
+                    if (load[3] == "2") { radioButton2.Checked = true; }
+                    if (load[3] == "3") { radioButton3.Checked = true; }
+                    if (load[3] == "4") { radioButton4.Checked = true; }
 
+                }
             }
+            catch { }
         }
 
         private void radioButton2bit_Click(object sender, EventArgs e)
