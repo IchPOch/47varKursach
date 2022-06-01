@@ -79,6 +79,48 @@ namespace WindowsFormsApp1
                 return B;
             }
         }
+        void save_settings(string save)
+        {
+            using (StreamWriter file1 = new StreamWriter(save))
+            {
+                if (radioButton2bit.Checked) { file1.WriteLine("2"); }
+                if (radioButton4bit.Checked) { file1.WriteLine("4"); }
+                if (radioButton6bit.Checked) { file1.WriteLine("6"); }
+                if (colorx.Color != null) { file1.WriteLine(colorx.Color.ToString()); }
+                if (colory.Color != null) { file1.WriteLine(colory.Color.ToString()); }
+                if (radioButton1.Checked) { file1.WriteLine("1"); }
+                if (radioButton2.Checked) { file1.WriteLine("2"); }
+                if (radioButton3.Checked) { file1.WriteLine("3"); }
+                if (radioButton4.Checked) { file1.WriteLine("4"); }
+            }
+        }
+        void save_protocol(int[,] A, int[,] B, string protocol)
+        {
+            using (StreamWriter file1 = new StreamWriter(protocol, true))
+            {
+                string perevod = "Перевод 8бит кода в " + bit.ToString() + "бит: ";
+                file1.WriteLine("");
+                file1.WriteLine(perevod);
+
+                for (int i = 0; i < A.GetLength(0); i++)
+                {
+                    for (int j = 0; j < A.GetLength(1); j++)
+                    {
+                        file1.Write(A[i, j].ToString());
+                    }
+                    file1.Write(" ");
+                }
+                file1.Write(" ---> ");
+                for (int i = 0; i < B.GetLength(0); i++)
+                {
+                    for (int j = 0; j < B.GetLength(1); j++)
+                    {
+                        file1.Write(B[i, j].ToString());
+                    }
+                    file1.Write(" ");
+                }
+            }
+        }
         public Form1()
         {
             InitializeComponent();
@@ -154,30 +196,7 @@ namespace WindowsFormsApp1
                 }
 
                 int[,] B = Perenos(s);
-                using (StreamWriter file1 = new StreamWriter(protocol, true))
-                {
-                    string perevod = "Перевод 8бит кода в " + bit.ToString() + "бит: ";
-                    file1.WriteLine("");
-                    file1.WriteLine(perevod);
-
-                    for (int i = 0; i < A.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < A.GetLength(1); j++)
-                        {
-                            file1.Write(A[i, j].ToString());
-                        }
-                        file1.Write(" ");
-                    }
-                    file1.Write(" ---> ");
-                    for (int i = 0; i < B.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < B.GetLength(1); j++)
-                        {
-                            file1.Write(B[i, j].ToString());
-                        }
-                        file1.Write(" ");
-                    }
-                }
+                save_protocol(A, B, protocol);
                 int[] C = new int[B.GetLength(0)];
                 int chislo = 0;
                 for (int i = 0; i < B.GetLength(0); i++)
@@ -196,10 +215,7 @@ namespace WindowsFormsApp1
                 ChartR.ChartAreas[0].AxisX.LineColor = colorx.Color;
                 ChartR.ChartAreas[0].AxisY.LineColor = colory.Color;
                 ChartR.ChartAreas[0].AxisX.LineWidth = 1;
-                //ChartR.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0,}K";
                 ChartR.ChartAreas[0].AxisY2.Enabled = AxisEnabled.False;
-                //ChartR.ChartAreas[0].AxisX.MinorGrid.Enabled = true;
-                //ChartR.ChartAreas[0].AxisY.MinorGrid.Enabled = true;
                 if (radioButton1.Checked)
                 {
                     ChartR.ChartAreas[0].AxisX.MajorTickMark.TickMarkStyle = TickMarkStyle.OutsideArea;
@@ -220,8 +236,6 @@ namespace WindowsFormsApp1
                     ChartR.ChartAreas[0].AxisX.MajorTickMark.TickMarkStyle = TickMarkStyle.None;
                     ChartR.ChartAreas[0].AxisY.MajorTickMark.TickMarkStyle = TickMarkStyle.None;
                 }
-                TickMark TM = new TickMark();
-                TM.TickMarkStyle = (TickMarkStyle)0;
                 var dataPointSeries = new Series
                 {
                     Name = "Series 1",
@@ -236,18 +250,7 @@ namespace WindowsFormsApp1
                 }
 
                 ChartR.Series.Add(dataPointSeries);
-                using (StreamWriter file1 = new StreamWriter(save))
-                {
-                    if (radioButton2bit.Checked) { file1.WriteLine("2"); }
-                    if (radioButton4bit.Checked) { file1.WriteLine("4"); }
-                    if (radioButton6bit.Checked) { file1.WriteLine("6"); }
-                    if(colorx.Color != null) { file1.WriteLine(colorx.Color.ToString()); }
-                    if(colory.Color != null) { file1.WriteLine(colory.Color.ToString()); }
-                    if (radioButton1.Checked) { file1.WriteLine("1"); }
-                    if (radioButton2.Checked) { file1.WriteLine("2"); }
-                    if(radioButton3.Checked) { file1.WriteLine("3"); }
-                    if (radioButton4.Checked) { file1.WriteLine("4"); }
-                }
+                save_settings(save);
             }
             catch (FormatException) 
             {
